@@ -7,19 +7,23 @@ import Navbar from "./Navbar";
 import { useRouter } from 'next/navigation';
 
 const CryptoList = () => {
+  console.log("CryptoList rendering");
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
   useEffect(() => {
+    console.log("CryptoList component mounted");
     const fetchData = async () => {
+      console.log("Attempting to fetch crypto list data...");
       try {
         const response = await axios.get(
           "https://api.coingecko.com/api/v3/coins/markets?vs_currency=inr&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d"
         );
+        console.log("Crypto list data received:", response.data.length, "items");
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching crypto list data:", error);
       }
     };
     fetchData();

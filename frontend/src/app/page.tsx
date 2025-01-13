@@ -1,7 +1,10 @@
+'use client';
+
 import React from 'react'
 import CryptoList from '../Components/CryptoList.js';
 
-const page = () => {
+const Page = () => {
+    console.log("Main page component mounted");
     return (
         <div>
             <CryptoList />
@@ -9,4 +12,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
