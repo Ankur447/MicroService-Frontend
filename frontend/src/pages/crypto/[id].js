@@ -19,15 +19,34 @@ const CryptoDetails = () => {
     const handleBuyClick = async () => {
         try {
             // Get user_id and wallet_id from session storage
-            const user_id = parseInt(sessionStorage.getItem('user_id') || '1');
-            const wallet_id = parseInt(sessionStorage.getItem('wallet_id') || '1');
+            const user_id = sessionStorage.getItem('user_id');
+            const wallet_id = sessionStorage.getItem('wallet_id');
+            
+            // Validate required data
+            if (!user_id) {
+                throw new Error('Please log in to make a purchase');
+            }
+
+            if (!id) {
+                throw new Error('Cryptocurrency symbol is missing');
+            }
+
+            const parsedQuantity = parseFloat(quantity);
+            if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+                throw new Error('Please enter a valid quantity greater than 0');
+            }
+
+            const currentPrice = (cryptoData.market_data.current_price.inr * parseFloat(quantity || 0));
+            if (!currentPrice) {
+                throw new Error('Price data is not available');
+            }
             
             const buyData = {
-                user_id: user_id,
-                crypto_symbol: id, // Using URL parameter directly
-                amount: Math.abs(parseFloat(quantity)),
-                price: cryptoData.market_data.current_price.inr,
-                wallet_id: wallet_id
+                user_id: parseInt(user_id),
+                crypto_symbol: id,
+                amount: parsedQuantity,
+                price: currentPrice,
+                wallet_id: wallet_id ? parseInt(wallet_id) : null
             };
             
             console.log('=== Buy Transaction Data ===');
@@ -41,7 +60,7 @@ const CryptoDetails = () => {
                 },
                 body: JSON.stringify({
                     query: `
-                        mutation CreatePurchase($user_id: Int!, $crypto_symbol: String!, $amount: Float!, $price: Float!, $wallet_id: Int!) {
+                        mutation CreatePurchase($user_id: Int!, $crypto_symbol: String!, $amount: Float!, $price: Float!, $wallet_id: Int) {
                             createPurchase(
                                 user_id: $user_id,        
                                 crypto_symbol: $crypto_symbol, 
@@ -61,29 +80,61 @@ const CryptoDetails = () => {
                 })
             });
 
-            const result = await response.json();
-            if (result.errors) {
-                throw new Error(result.errors[0].message);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+
+            const result = await response.json();
+            console.log('Server response:', result);
+            
+            if (result.errors) {
+                throw new Error(result.errors[0].message || 'Failed to process purchase');
+            }
+
+            if (!result.data?.createPurchase) {
+                throw new Error('Purchase was not created successfully');
+            }
+
             alert('Purchase successful!');
+            // Reset quantity after successful purchase
+            setQuantity('0.0');
         } catch (error) {
             console.error('Error making purchase:', error);
-            alert('Failed to make purchase: ' + error.message);
+            alert(error.message || 'Failed to make purchase. Please try again.');
         }
     };
 
     const handleSellClick = async () => {
         try {
             // Get user_id and wallet_id from session storage
-            const user_id = parseInt(sessionStorage.getItem('user_id') || '1');
-            const wallet_id = parseInt(sessionStorage.getItem('wallet_id') || '1');
+            const user_id = sessionStorage.getItem('user_id');
+            const wallet_id = sessionStorage.getItem('wallet_id');
+            
+            // Validate required data
+            if (!user_id) {
+                throw new Error('Please log in to make a sale');
+            }
+
+            if (!id) {
+                throw new Error('Cryptocurrency symbol is missing');
+            }
+
+            const parsedQuantity = parseFloat(quantity);
+            if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+                throw new Error('Please enter a valid quantity greater than 0');
+            }
+
+            const currentPrice = (cryptoData.market_data.current_price.inr * parseFloat(quantity || 0));
+            if (!currentPrice) {
+                throw new Error('Price data is not available');
+            }
             
             const sellData = {
-                user_id: user_id,
+                user_id: parseInt(user_id),
                 crypto_symbol: id,
-                amount: -1 * parseFloat(quantity), // Make amount negative for selling
-                price: cryptoData.market_data.current_price.inr,
-                wallet_id: wallet_id
+                amount: -1 * parsedQuantity, // Make amount negative for selling
+                price: currentPrice,
+                wallet_id: wallet_id ? parseInt(wallet_id) : null
             };
             
             console.log('=== Sell Transaction Data ===');
@@ -97,7 +148,7 @@ const CryptoDetails = () => {
                 },
                 body: JSON.stringify({
                     query: `
-                        mutation CreatePurchase($user_id: Int!, $crypto_symbol: String!, $amount: Float!, $price: Float!, $wallet_id: Int!) {
+                        mutation CreatePurchase($user_id: Int!, $crypto_symbol: String!, $amount: Float!, $price: Float!, $wallet_id: Int) {
                             createPurchase(
                                 user_id: $user_id,        
                                 crypto_symbol: $crypto_symbol, 
@@ -117,15 +168,27 @@ const CryptoDetails = () => {
                 })
             });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const result = await response.json();
             console.log('Server response:', result);
+            
             if (result.errors) {
-                throw new Error(result.errors[0].message);
+                throw new Error(result.errors[0].message || 'Failed to process sale');
             }
+
+            if (!result.data?.createPurchase) {
+                throw new Error('Sale was not created successfully');
+            }
+
             alert('Sale successful!');
+            // Reset quantity after successful sale
+            setQuantity('0.0');
         } catch (error) {
             console.error('Error making sale:', error);
-            alert('Failed to make sale: ' + error.message);
+            alert(error.message || 'Failed to make sale. Please try again.');
         }
     };
 

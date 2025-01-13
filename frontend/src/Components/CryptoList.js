@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import Link from "next/link";
-import Navbar from "./Navbar";
 import { useRouter } from 'next/navigation';
 
 const CryptoList = () => {
@@ -37,13 +36,13 @@ const CryptoList = () => {
     return crypto.name.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  const handleRedirect = (cryptoId) => {
+  const handleRedirect = (event, cryptoId) => {
+    event.preventDefault();
     router.push(`/crypto/${cryptoId}`);
   };
 
   return (
     <>
-      <Navbar />
       <div className="container">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent p-4 my-6 tracking-tight">
           Crypto Paper Trader
@@ -133,13 +132,13 @@ const CryptoList = () => {
                 <td>
                   <button
                     className="btn btn-success mr-2"
-                    onClick={() => handleRedirect(crypto.id)}
+                    onClick={(e) => handleRedirect(e, crypto.id)}
                   >
                     Buy
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleRedirect(crypto.id)}
+                    onClick={(e) => handleRedirect(e, crypto.id)}
                   >
                     Sell
                   </button>
