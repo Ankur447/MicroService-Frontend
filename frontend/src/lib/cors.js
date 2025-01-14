@@ -3,12 +3,13 @@ import Cors from 'cors';
 
 // Initialize the cors middleware
 const cors = Cors({
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-  origin: '*', // Replace '*' with your allowed domain(s) for security
-  credentials: true, // Enable cookies or authorization headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  origin: true,
 });
 
-// Helper method to wait for middleware to execute before continuing
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
 export function runMiddleware(req, res, fn) {
   return new Promise((resolve, reject) => {
     fn(req, res, (result) => {
@@ -17,7 +18,7 @@ export function runMiddleware(req, res, fn) {
       }
       return resolve(result);
     });
-  });   
+  });
 }
 
 export default cors;
