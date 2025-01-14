@@ -14,7 +14,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchWalletData = async () => {
       try {
-        const user_id = parseInt(sessionStorage.getItem('user_id') || '1');
+        const user_id = parseInt(sessionStorage.getItem('user_id') || 'NULL');
         console.log('Fetching wallet data with user_id:', user_id);
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
@@ -56,6 +56,7 @@ export default function Dashboard() {
 
   // Calculate total balance
   const totalBalance = holdings.reduce((sum, holding) => sum + holding.balance, 0);
+  const balanceINR = totalBalance * 80;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -77,7 +78,8 @@ export default function Dashboard() {
                 </div>
                 <div className="border-top pt-3">
                   <h6 className="text-muted mb-2">Total Holdings</h6>
-                  <h3 className="fw-bold">{totalBalance.toFixed(3)} Coins</h3>
+                  <h3 className="fw-bold">{totalBalance.toFixed(5)} Coins</h3>
+                  <h3 className="fw-bold">${balanceINR.toFixed(2)}</h3>
                 </div>
               </div>
             </div>

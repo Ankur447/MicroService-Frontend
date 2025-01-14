@@ -45,8 +45,17 @@ const CryptoList = () => {
     <>
       <div className="container">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent p-4 my-6 tracking-tight">
-          Crypto Paper Trader
+          Crypto Mock Wallet
         </h1>
+        <div className="text-center max-w-2xl mx-auto my-6">
+          <p className="text-lg text-gray-700 mb-3">
+            Buy and sell crypto with mock money and store it in your virtual wallet. 
+            This Next.js app uses the CoinGecko API for real-time crypto market data.
+          </p>
+          <p className="text-lg font-semibold text-emerald-600">
+            Register or login to your account to start trading!
+          </p>
+        </div>
         <input
           type="text"
           placeholder="Search crypto name"

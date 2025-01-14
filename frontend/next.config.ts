@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
   },
   webpack: (config) => {
     return config;
-  }
+  },
+  postcss: true
 };
 
 export default nextConfig;
