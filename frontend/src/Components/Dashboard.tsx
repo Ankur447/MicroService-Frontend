@@ -52,16 +52,43 @@ export default function Dashboard() {
       }
     };
 
+    const fetchBalance = async () => {
+      try {
+        const user_id = parseInt(sessionStorage.getItem('user_id') || 'NULL');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
+              query RootQueryType($userId: Int) {
+                getBalance(user_id: $userId)
+              }
+            `,
+            variables: {
+              userId: user_id
+            }
+          })
+        });
+
+        const result = await response.json();
+        console.log('Balance API Response:', result);
+        
+        if (result.data?.getBalance) {
+          console.log('Setting balance:', result.data.getBalance);
+          setBalance(result.data.getBalance);
+        } else {
+          console.log('No balance data in response');
+        }
+      } catch (error) {
+        console.error('Error fetching balance data:', error);
+      }
+    };
+
     fetchWalletData();
+    fetchBalance();
   }, []);
-  const fetchBalance = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  }
 
   // Calculate total balance
   const totalBalance = holdings.reduce((sum, holding) => sum + holding.balance, 0);
@@ -88,7 +115,7 @@ export default function Dashboard() {
                 <div className="border-top pt-3">
                   <h6 className="text-muted mb-2">Total Holdings</h6>
                   <h3 className="fw-bold">{totalBalance.toFixed(5)} Coins</h3>
-                  <h3 className="fw-bold">${balanceINR.toFixed(2)}</h3>
+                  <h3 className="fw-bold">₹{balance.toFixed(2)}</h3>
                 </div>
               </div>
             </div>

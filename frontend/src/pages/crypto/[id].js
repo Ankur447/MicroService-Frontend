@@ -106,57 +106,45 @@ const CryptoDetails = () => {
 
     const handleSellClick = async () => {
         try {
-            // Get user_id and wallet_id from session storage
+            // Fetch user and wallet IDs from session storage
             const user_id = sessionStorage.getItem('user_id');
-            const wallet_id = sessionStorage.getItem('wallet_id');
-            
-            // Validate required data
-            if (!user_id) {
-                throw new Error('Please log in to make a sale');
-            }
-
-            if (!id) {
-                throw new Error('Cryptocurrency symbol is missing');
-            }
-
+            const walletId = sessionStorage.getItem('wallet_id'); // Renamed to walletId to avoid conflict
+    
+            // Validate inputs
+            if (!user_id) throw new Error('Please log in to make a sale.');
+            if (!id) throw new Error('Cryptocurrency symbol is missing.');
+    
             const parsedQuantity = parseFloat(quantity);
             if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
-                throw new Error('Please enter a valid quantity greater than 0');
+                throw new Error('Enter a valid quantity greater than 0.');
             }
-
-            const currentPrice = (cryptoData.market_data.current_price.inr * parseFloat(quantity || 0));
-            if (!currentPrice) {
-                throw new Error('Price data is not available');
-            }
-            
+    
+            const currentPrice = cryptoData.market_data.current_price.inr * parsedQuantity;
+            if (!currentPrice) throw new Error('Price data unavailable.');
+    
+            // Prepare sell data
             const sellData = {
                 user_id: parseInt(user_id),
                 crypto_symbol: id,
-                amount: -1 * parsedQuantity, 
+                amount: parsedQuantity,
                 price: currentPrice,
-                wallet_id: wallet_id ? parseInt(wallet_id) : null
+                wallet_id: walletId ? parseInt(walletId) : null,
             };
-            
-            console.log('=== Sell Transaction Data ===');
-            console.log(JSON.stringify(sellData, null, 2));
-            console.log('===========================');
-            
+    
+            // Make the API call
             const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     query: `
                         mutation CreateSell($user_id: Int!, $crypto_symbol: String!, $amount: Float!, $price: Float!, $wallet_id: Int) {
-                            createPurchase(
-                                user_id: $user_id,        
-                                crypto_symbol: $crypto_symbol, 
-                                amount: $amount,    f  
+                            createSell(
+                                user_id: $user_id,
+                                crypto_symbol: $crypto_symbol,
+                                amount: $amount,
                                 price: $price,
-                                wallet_id: $wallet_id   
+                                wallet_id: $wallet_id
                             ) {
-                                purchase_id
                                 crypto_symbol
                                 amount
                                 price
@@ -164,33 +152,30 @@ const CryptoDetails = () => {
                             }
                         }
                     `,
-                    variables: sellData
-                })
+                    variables: sellData,
+                }),
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
+    
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const result = await response.json();
-            console.log('Server response:', result);
-            
-            if (result.errors) {
-                throw new Error(result.errors[0].message || 'Failed to process sale');
-            }
-
-            if (!result.data?.createPurchase) {
-                throw new Error('Sale was not created successfully');
-            }
-
-            alert('Sale successful!');
-            // Reset quantity after successful sale
+    
+            if (result.errors) throw new Error(result.errors[0].message || 'Failed to process the sale.');
+            if (!result.data?.createSell) throw new Error('Sale was not successful.');
+    
+            // Success response
+            const { crypto_symbol, amount, price, wallet_id } = result.data.createSell;
+            console.log('Sale successful:', { crypto_symbol, amount, price, wallet_id });
+    
+            alert(`Sale successful!\nCrypto: ${crypto_symbol}\nAmount: ${amount}\nPrice: ₹${price}\nWallet: ${wallet_id || 'N/A'}`);
             setQuantity('0.0');
         } catch (error) {
             console.error('Error making sale:', error);
-            alert(error.message || 'Failed to make sale. Please try again.');
+            alert(error.message || 'Failed to make the sale. Please try again.');
         }
     };
+    
+    
+    
 
     const handleQuantityChange = (e) => {
         const value = e.target.value;
