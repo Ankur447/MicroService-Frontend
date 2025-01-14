@@ -92,7 +92,7 @@ export default function Dashboard() {
 
   // Calculate total balance
   const totalBalance = holdings.reduce((sum, holding) => sum + holding.balance, 0);
-  const balanceINR = totalBalance * 80;
+  // const balanceINR = totalBalance * 80;
 
   return (
     <div className="min-h-screen bg-gray-100">
