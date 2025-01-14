@@ -43,13 +43,13 @@ const Navbar = () => {
 
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
-                        {isLoggedIn && (
+                         (
                             <li className="nav-item mx-2">
                                 <Link className="btn btn-primary" href="/dashboard">
                                     Dashboard
                                 </Link>
                             </li>
-                        )}
+                        )
                         <li className="nav-item mx-2">
                             {isLoggedIn ? (
                                 <button 
