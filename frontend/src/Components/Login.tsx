@@ -70,6 +70,7 @@ const Login = () => {
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back!</h2>
           <p className="text-sm text-gray-600">Please sign in to your account</p>
+          <p style={{color: 'blue'}}> UI of login and signup is broken for deployed site. works fine locally so please bare with this</p>
         </div>
 
         {error && (
@@ -112,7 +113,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black ${
               loading
                 ? 'bg-indigo-400 cursor-not-allowed'
                 : 'bg-indigo-600 hover:bg-indigo-700'

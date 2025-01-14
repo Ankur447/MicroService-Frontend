@@ -263,6 +263,7 @@ const CryptoDetails = () => {
                             <b>Circulating Supply:</b>
                             {cryptoData.market_data.circulating_supply}
                         </p>
+                        <p style={{color: 'blue'}}>Crypto data comes from a public api CoinGecko </p>
 
                         {/* Trading Section */}
                         <div className="mt-4 p-3 border rounded">
@@ -279,7 +280,9 @@ const CryptoDetails = () => {
                                     step="any"
                                 />
                             </div>
+                            <p className='bg-blue-500' style={{color: 'blue'}}>Buy and sell feature is handled by wallet microservice</p>
                             <div className="d-flex gap-2 mb-3">
+                            
                                 <button className="btn btn-success flex-grow-1" onClick={handleBuyClick}>
                                     Buy
                                 </button>
@@ -293,6 +296,7 @@ const CryptoDetails = () => {
                         </div>
                     </div>
                 </div>
+                
             </div>
         </>
     );

@@ -52,9 +52,10 @@ const CryptoList = () => {
             Buy and sell crypto with mock money and store it in your virtual wallet. 
             This Next.js app uses the CoinGecko API for real-time crypto market data.
           </p>
-          <p className="text-lg font-semibold text-emerald-600">
-            Register or login to your account to start trading!
+          <p className="text-xl text-center font-bold text-emerald-600">
+            After Registering make sure to login in, so that you can buy and sell crypto.
           </p>
+          <p>search bar works btw </p>
         </div>
         <input
           type="text"

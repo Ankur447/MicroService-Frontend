@@ -97,7 +97,12 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-100">
       
+      
       <div className="container py-5">
+        <h1>Dashboard</h1>
+      <p style={{color: 'blue'}}>Dashboard feature is handled by wallet microservice</p>
+      <p style={{color: 'blue'}}>User data is fetched from user microservice </p>
+      <p style={{color: 'blue'}}>Both microservices are connected to the same mysql database</p>
         <div className="row">
           {/* Wallet Summary Card */}
           <div className="col-md-4 mb-4">
