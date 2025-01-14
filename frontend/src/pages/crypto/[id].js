@@ -132,7 +132,7 @@ const CryptoDetails = () => {
             const sellData = {
                 user_id: parseInt(user_id),
                 crypto_symbol: id,
-                amount: -1 * parsedQuantity, // Make amount negative for selling
+                amount: -1 * parsedQuantity, 
                 price: currentPrice,
                 wallet_id: wallet_id ? parseInt(wallet_id) : null
             };

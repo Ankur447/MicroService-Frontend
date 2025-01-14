@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const Login = () => {
+const Signup = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: ''
   });
@@ -27,12 +28,15 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3002/login', {
+      console.log('Sending signup request with:', formData);
+      
+      const response = await fetch('http://localhost:3002/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: formData.username,
           email: formData.email,
           password: formData.password
         }),
@@ -54,7 +58,7 @@ const Login = () => {
         }
         router.push('/dashboard');
       } else {
-        setError(data.error || data.message || 'Login failed');
+        setError(data.error || data.message || 'Registration failed');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -68,8 +72,8 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back!</h2>
-          <p className="text-sm text-gray-600">Please sign in to your account</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
+          <p className="text-sm text-gray-600">Sign up for a new account</p>
         </div>
 
         {error && (
@@ -79,6 +83,21 @@ const Login = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              value={formData.username}
+              onChange={handleInputChange}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+            />
+          </div>
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
@@ -118,13 +137,13 @@ const Login = () => {
                 : 'bg-indigo-600 hover:bg-indigo-700'
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200`}
           >
-            {loading ? 'Processing...' : 'Sign In'}
+            {loading ? 'Processing...' : 'Create Account'}
           </button>
         </form>
 
         <div className="text-center mt-4">
-          <Link href="/signup" className="text-sm text-indigo-600 hover:text-indigo-500">
-            Don&apos;t have an account? Sign up
+          <Link href="/login" className="text-sm text-indigo-600 hover:text-indigo-500">
+            Already have an account? Sign in
           </Link>
         </div>
       </div>
@@ -132,4 +151,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
