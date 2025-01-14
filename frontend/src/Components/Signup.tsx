@@ -56,7 +56,7 @@ const Signup = () => {
           sessionStorage.setItem('user_id', userData.user_id.toString());
           console.log('Stored user_id in sessionStorage:', sessionStorage.getItem('user_id'));
         }
-        router.push('/dashboard');
+        router.push('/login');
       } else {
         setError(data.error || data.message || 'Registration failed');
       }
