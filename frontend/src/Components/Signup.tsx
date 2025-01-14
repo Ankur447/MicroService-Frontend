@@ -30,7 +30,7 @@ const Signup = () => {
     try {
       console.log('Sending signup request with:', formData);
       
-      const response = await fetch('http://localhost:3002/register', {
+      const response = await fetch(`{process.env.NEXT_PUBLIC_USER_MICROSERVICE_URL}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

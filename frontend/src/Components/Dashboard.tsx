@@ -17,7 +17,7 @@ export default function Dashboard() {
         const user_id = parseInt(sessionStorage.getItem('user_id') || '1');
         console.log('Fetching wallet data with user_id:', user_id);
 
-        const response = await fetch('http://localhost:3001/graphql', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

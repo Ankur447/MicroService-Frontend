@@ -53,7 +53,7 @@ const CryptoDetails = () => {
             console.log(JSON.stringify(buyData, null, 2));
             console.log('==========================');
             
-            const response = await fetch('http://localhost:3001/graphql', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ const CryptoDetails = () => {
             console.log(JSON.stringify(sellData, null, 2));
             console.log('===========================');
             
-            const response = await fetch('http://localhost:3001/graphql', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
