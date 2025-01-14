@@ -10,6 +10,7 @@ interface WalletHolding {
 
 export default function Dashboard() {
   const [holdings, setHoldings] = useState<WalletHolding[]>([]);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
     const fetchWalletData = async () => {
@@ -53,6 +54,14 @@ export default function Dashboard() {
 
     fetchWalletData();
   }, []);
+  const fetchBalance = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_WALLET_MICROSERVICE_URL}/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 
   // Calculate total balance
   const totalBalance = holdings.reduce((sum, holding) => sum + holding.balance, 0);

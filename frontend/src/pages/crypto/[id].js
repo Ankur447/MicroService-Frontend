@@ -148,11 +148,11 @@ const CryptoDetails = () => {
                 },
                 body: JSON.stringify({
                     query: `
-                        mutation CreatePurchase($user_id: Int!, $crypto_symbol: String!, $amount: Float!, $price: Float!, $wallet_id: Int) {
+                        mutation CreateSell($user_id: Int!, $crypto_symbol: String!, $amount: Float!, $price: Float!, $wallet_id: Int) {
                             createPurchase(
                                 user_id: $user_id,        
                                 crypto_symbol: $crypto_symbol, 
-                                amount: $amount,         
+                                amount: $amount,    f  
                                 price: $price,
                                 wallet_id: $wallet_id   
                             ) {
